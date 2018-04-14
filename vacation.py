@@ -48,20 +48,20 @@ def welcome():
     
     """List all available api routes"""
     
-    return ("Welcome to the Hawaii Surfer's Analysis API<br/><br/>"
+    return ("Welcome to the Hawaii Vacation Climate Analysis API<br/><br/>"
             
-        f"Avalable Endpoints:<br/>"
-            
-        f"/api/v1.0/precipitation - precipation data (in inches)<br/>"
-
-        f"/api/v1.0/stations - information on weather collection stations <br/>"
-
-        f"/api/v1.0/temperature - temperature observations (tobs) <br/>"
-
-       f"/api/v1.0/*enter start date in Y-m-d format*<br/>"
-            
-       f"/api/v1.0/*enter start date in Y-m-d format*/*enter end date in Y-m-d format*<br/>"
-    )
+                "Here are the available end points:<br/>"
+    		
+                "/api/v1.0/precipitation<br/>"
+    		
+                "/api/v1.0/stations<br/>"
+    		
+                "/api/v1.0/tobs<br/>"
+    		
+                "/api/v1.0/*enter start date in Y-m-d format*<br/>"
+    		
+                "/api/v1.0/*enter start date in Y-m-d format*/*enter end date in Y-m-d format*<br/>"
+            )
 
 
 @app.route("/api/v1.0/precipitation")
@@ -109,8 +109,8 @@ def temp_input(start):
     def start_temp(start_date):
         
         print("Server received request for start page...")
-        data = pd.DataFrame(session.query(measurement.tobs).\
-        filter(measurement.date >= start_date).all())
+        data = pd.DataFrame(session.query(measurements.tobs).\
+        filter(measurements.date >= start_date).all())
 
         avg = round(data['tobs'].mean())
         low = data['tobs'].min()
@@ -131,15 +131,15 @@ def temp_input_end(start, end):
     
     def calc_temps(start_date, end_date):
         print("Server received request for start/end page...")
-        data = pd.DataFrame(session.query(measurement.tobs).\
-        filter(measurement.date >= start_date, measurement.date < end_date).all())
+        data = pd.DataFrame(session.query(measurements.tobs).\
+        filter(measurements.date >= start_date, measurements.date < end_date).all())
 
         avg = round(data['tobs'].mean())
         low = data['tobs'].min()
         high = data['tobs'].max()
         return avg, low, high
 
-    average,minimum,maximum = calc_temps(start, end)
+    average, minimum, maximum = calc_temps(start, end)
     dictionary = {"Minimum_Temp" : str(minimum), "Average_Temp" : str(average), "Max_Temp" : str(maximum)}
     
     return jsonify(dictionary)
